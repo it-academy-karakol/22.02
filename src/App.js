@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import ListItem from './ListItem/ListItem';
 import NewItem from './NewItem/NewItem';
+import DoneItem from './DoneItem/DoneItem';
 
 class App extends Component {
   state = {
@@ -9,6 +10,8 @@ class App extends Component {
       "Todo 1",
       "Todo 2",
       "Todo 3"
+    ],
+    done: [
     ],
     newItem: ""
   }
@@ -29,12 +32,16 @@ class App extends Component {
 
   deleteListItem = (index) => {
     const newItems = [...this.state.items];
+    const newDone = [...this.state.done];
     
-    newItems.splice(index, 1);
+    const item = newItems.splice(index, 1);
+    newDone.push(item);
 
     this.setState({
       items: newItems,
-      newItem: ""
+      done: newDone,
+      newItem: "",
+      editItem: ""
     });
   }
 
@@ -44,15 +51,24 @@ class App extends Component {
         item={item}
         deleteHandler={() => this.deleteListItem(index)} />
     );
+    const done = this.state.done.map(
+      (item, index) => <DoneItem
+        item={item} />
+    );
 
     return (
       <div className="App">
+        <h1>ToDo</h1>
         <ul>
           {listItems}
           <NewItem
             changeNewItem={this.changeNewItem}
             addNewItem={this.addNewItem}
             value={this.state.newItem} />
+        </ul>
+        <h1>Done</h1>
+        <ul>
+          {done}
         </ul>
       </div>
     );
